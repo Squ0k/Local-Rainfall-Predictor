@@ -86,8 +86,17 @@ drop.ondrop = e => {
 
 // Camera
 async function startCamera(){
-    const stream = await navigator.mediaDevices.getUserMedia({video:true});
-    video.srcObject = stream;
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { exact: "environment" } } // request rear camera
+        });
+        video.srcObject = stream;
+    } catch (err) {
+        console.warn("Rear camera not available, using default camera:", err);
+        // fallback to default camera
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+    }
 }
 
 // Capture
