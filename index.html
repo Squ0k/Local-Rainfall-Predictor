@@ -4,8 +4,17 @@
 <meta charset="UTF-8">
 <title>Local Rainfall Predictor</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
 <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
 <link rel="manifest" href="manifest.json">
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker registered'));
+}
+</script>
 
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -21,13 +30,16 @@ body {
     background: linear-gradient(to bottom, #2c3e50, #e67e22);
     color: black;
     overflow: hidden;
-    font-size: calc(16px * var(--scale));
+    touch-action: manipulation;
+    font-size: calc((16px + 0.5vw) * var(--scale));
+    height: 100%;
+    min-height: 100%;
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100dvh;
 }
 
 .banner {
@@ -292,7 +304,10 @@ upload.onchange = e => {
 async function handleCamera(){
     if(!cameraActive){
         try{
-            const stream = await navigator.mediaDevices.getUserMedia({video:true});
+            const constraints = {
+                video: { facingMode: { ideal: "environment" } }
+            };
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
             video.srcObject = stream;
 
             video.onloadedmetadata = () => {
@@ -301,7 +316,9 @@ async function handleCamera(){
 
             cameraActive = true;
             cameraBtn.innerText = "Take Photo";
-        }catch{}
+        }catch{
+            alert("Camera not available");
+        }
     } else {
         capture();
     }
@@ -382,6 +399,10 @@ function openPopup() {
 function closePopup() {
     document.getElementById("popup").classList.add("hidden");
 }
+
+window.addEventListener("orientationchange", () => {
+    document.body.style.transform = "scale(1)";
+});
 
 </script>
 
