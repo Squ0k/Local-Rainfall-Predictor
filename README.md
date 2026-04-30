@@ -6,9 +6,10 @@ The mobile application was developed as a practical implementation of the resear
 
 Instructions for usage can be found in the **\[i\]** icon at the top-right corner of the application.
 
-
 Contributors to the project are as follows:
 
 Kevin Tan - 
+
 Jason Nishio - 
+
 Nelson Nishio - linkedin.com/in/nelson-nishio
